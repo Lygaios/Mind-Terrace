@@ -1,0 +1,22 @@
+{
+  "name": "mind-terrace",
+  "version": "1.0.0",
+  "description": "A focus tool with to-do list and Pomodoro timer",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["focus", "productivity", "pomodoro", "todo"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^3.5.21",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vite": "^7.1.7"
+  }
+}
