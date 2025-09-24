@@ -17,17 +17,9 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import TodoList from '../components/TodoList.vue'
 import PomodoroTimer from '../components/PomodoroTimer.vue'
-
-export default {
-  name: 'Home',
-  components: {
-    TodoList,
-    PomodoroTimer
-  }
-}
 </script>
 
 <style scoped>

@@ -29,37 +29,34 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref } from 'vue'
 
-export default {
-  name: 'TodoList',
-  setup() {
-    const todos = ref([])
-    const newTodo = ref('')
-    
-    const addTodo = () => {
-      if (newTodo.value.trim()) {
-        todos.value.push({
-          id: Date.now(),
-          text: newTodo.value.trim(),
-          completed: false
-        })
-        newTodo.value = ''
-      }
-    }
-    
-    const removeTodo = (id) => {
-      todos.value = todos.value.filter(todo => todo.id !== id)
-    }
-    
-    return {
-      todos,
-      newTodo,
-      addTodo,
-      removeTodo
-    }
+// Define the Todo interface
+interface Todo {
+  id: number
+  text: string
+  completed: boolean
+}
+
+// Reactive state with proper typing
+const todos = ref<Todo[]>([])
+const newTodo = ref<string>('')
+
+// Methods
+const addTodo = (): void => {
+  if (newTodo.value.trim()) {
+    todos.value.push({
+      id: Date.now(),
+      text: newTodo.value.trim(),
+      completed: false
+    })
+    newTodo.value = ''
   }
+}
+
+const removeTodo = (id: number): void => {
+  todos.value = todos.value.filter(todo => todo.id !== id)
 }
 </script>
 

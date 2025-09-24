@@ -44,92 +44,77 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
 
-export default {
-  name: 'PomodoroTimer',
-  setup() {
-    const timeLeft = ref(25 * 60) // 25 minutes in seconds
-    const isRunning = ref(false)
-    const isWorkSession = ref(true)
-    const workMinutes = ref(25)
-    const breakMinutes = ref(5)
-    let intervalId = null
-    
-    const formattedTime = computed(() => {
-      const minutes = Math.floor(timeLeft.value / 60)
-      const seconds = timeLeft.value % 60
-      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-    })
-    
-    const currentSession = computed(() => {
-      return isWorkSession.value ? 'Work Session' : 'Break Time'
-    })
-    
-    const toggleTimer = () => {
-      if (isRunning.value) {
-        clearInterval(intervalId)
-        isRunning.value = false
-      } else {
-        isRunning.value = true
-        intervalId = setInterval(() => {
-          if (timeLeft.value > 0) {
-            timeLeft.value--
-          } else {
-            // Session completed
-            clearInterval(intervalId)
-            isRunning.value = false
-            
-            // Switch between work and break
-            isWorkSession.value = !isWorkSession.value
-            timeLeft.value = isWorkSession.value 
-              ? workMinutes.value * 60 
-              : breakMinutes.value * 60
-              
-            // Optional: Add notification sound here
-            alert(isWorkSession.value ? 'Break finished! Time to work!' : 'Work session completed! Time for a break!')
-          }
-        }, 1000)
-      }
-    }
-    
-    const resetTimer = () => {
+// Reactive state with proper typing
+const timeLeft = ref<number>(25 * 60) // 25 minutes in seconds
+const isRunning = ref<boolean>(false)
+const isWorkSession = ref<boolean>(true)
+const workMinutes = ref<number>(25)
+const breakMinutes = ref<number>(5)
+let intervalId: number | null = null
+// Computed properties
+const formattedTime = computed((): string => {
+  const minutes = Math.floor(timeLeft.value / 60)
+  const seconds = timeLeft.value % 60
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+})
+
+const currentSession = computed((): string => {
+  return isWorkSession.value ? 'Work Session' : 'Break Time'
+})
+
+// Methods
+const toggleTimer = (): void => {
+  if (isRunning.value) {
+    if (intervalId !== null) {
       clearInterval(intervalId)
-      isRunning.value = false
-      isWorkSession.value = true
-      timeLeft.value = workMinutes.value * 60
+      intervalId = null
     }
-    
-    // Watch for changes in work/break minutes when timer is not running
-    const updateTimerDuration = () => {
-      if (!isRunning.value) {
+    isRunning.value = false
+  } else {
+    isRunning.value = true
+    intervalId = window.setInterval(() => {
+      if (timeLeft.value > 0) {
+        timeLeft.value--
+      } else {
+        // Session completed
+        if (intervalId !== null) {
+          clearInterval(intervalId)
+          intervalId = null
+        }
+        isRunning.value = false
+        
+        // Switch between work and break
+        isWorkSession.value = !isWorkSession.value
         timeLeft.value = isWorkSession.value 
           ? workMinutes.value * 60 
           : breakMinutes.value * 60
+          
+        // Optional: Add notification sound here
+        alert(isWorkSession.value ? 'Break finished! Time to work!' : 'Work session completed! Time for a break!')
       }
-    }
-    
-    // Cleanup interval on component unmount
-    onUnmounted(() => {
-      if (intervalId) {
-        clearInterval(intervalId)
-      }
-    })
-    
-    return {
-      timeLeft,
-      isRunning,
-      isWorkSession,
-      workMinutes,
-      breakMinutes,
-      formattedTime,
-      currentSession,
-      toggleTimer,
-      resetTimer
-    }
+    }, 1000)
   }
 }
+
+const resetTimer = (): void => {
+  if (intervalId !== null) {
+    clearInterval(intervalId)
+    intervalId = null
+  }
+  isRunning.value = false
+  isWorkSession.value = true
+  timeLeft.value = workMinutes.value * 60
+}
+
+// Cleanup interval on component unmount
+onUnmounted(() => {
+  if (intervalId !== null) {
+    clearInterval(intervalId)
+  }
+})
 </script>
 
 <style scoped>

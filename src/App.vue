@@ -17,10 +17,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'App'
-}
+<script setup lang="ts">
+// App component using TypeScript
 </script>
 
 <style>

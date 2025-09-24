@@ -8,10 +8,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Imprint'
-}
+<script setup lang="ts">
+// Imprint page component
 </script>
 
 <style scoped>

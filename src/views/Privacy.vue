@@ -8,10 +8,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Privacy'
-}
+<script setup lang="ts">
+// Privacy policy page component
 </script>
 
 <style scoped>
